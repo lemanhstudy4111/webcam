@@ -1,0 +1,26 @@
+.btn {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 14px 24px;
+  border: none;
+  transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s,
+    -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+  background-color: #ee0a0a;
+  color: #fff;
+}
+
+.btn:hover {
+  color: #fff;
+  background-color: #cd0000;
+  border-color: #cd0000;
+}
+
+.btn:disabled {
+  color: #f3f4f9;
+  background-color: #efa1a1;
+}

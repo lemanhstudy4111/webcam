@@ -1,0 +1,11 @@
+<p-toast></p-toast>
+<p-confirmDialog width="425"></p-confirmDialog>
+<p-button
+  (click)="confirm($event)"
+  icon="pi pi-upload"
+  label="Upload"
+  [style]="{ border: 'none', height: '100%', width: 'auto' }"
+  iconPos="right"
+  [disabled]="disabled"
+  (onAccept)="onConfirm()"
+></p-button>
