@@ -1,3 +1,3 @@
 # Webcam
 
-Webcam that uploads to a Firebase Storage
+Angular app to record using webcam with log in and sign up.
