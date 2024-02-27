@@ -1,0 +1,15 @@
+.main-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 90%;
+}
+
+h1 {
+  font-size: xx-large;
+}
+h2 {
+  font-size: larger;
+}

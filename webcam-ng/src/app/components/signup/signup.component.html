@@ -1,0 +1,29 @@
+<div class="signup-container">
+    <p-card header="Sign-up">
+      <form>
+        <div class="text-div">
+          <label>Email</label>
+          <input type="text" pInputText formControlName="signup" />
+        </div>
+        <div class="text-div">
+          <label>password</label>
+          <p-password
+            formControlName="password"
+            [toggleMask]="true"
+            [feedback]="false"
+          ></p-password>
+        </div>
+        <div class="bttm-container">
+            <span>
+                <p-checkbox formControlName="checked" value="terms" inputId="binary"></p-checkbox>
+                <p>I accept the terms and conditions.</p>
+            </span>
+          <div class="signup-btn-container">
+            <button pButton pRipple label="Sign up" type="submit"></button>
+            <p>Already have an account? <a routerLink="/login">Log in!</a></p>
+          </div>
+        </div>
+      </form>
+    </p-card>
+  </div>
+  

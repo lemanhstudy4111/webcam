@@ -4,14 +4,18 @@ import cors from "cors";
 import {
 	getDownloadURL,
 	getStorage,
-	ref,
-	uploadBytes,
+	ref as storageref,
 	uploadBytesResumable,
 } from "firebase/storage";
 import express from "express";
 import dotenv from "dotenv";
 import multer from "multer";
-import admin from "firebase-admin";
+import {
+	createUserWithEmailAndPassword,
+	getAuth,
+	signInWithEmailAndPassword,
+} from "firebase/auth";
+import { set, getDatabase, ref } from "firebase/database";
 
 dotenv.config();
 const envFile = process.env;
@@ -29,7 +33,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const appFirebase = initializeApp(firebaseConfig);
-const storage = getStorage();
+const storage = getStorage(appFirebase);
+const realtimeDb = getDatabase(appFirebase);
+const auth = getAuth(appFirebase);
 //express js server
 const app = express();
 const PORT = process.env.PORT;
@@ -40,24 +46,82 @@ app.use(express.json());
 //initialize multer
 const multStorage = multer.memoryStorage();
 const upload = multer({ storage: multStorage });
+const formUpload = multer();
 
 app.listen(PORT, () => {
 	console.log(`App is running on ${PORT}`);
 });
 
-app.post("/api/upload", upload.single("video"), async (req, res) => {
-	if (!req.file) {
-		return res.status(400).send("No file uploaded.");
+app.post(
+	"/api/upload",
+	upload.fields([
+		{
+			name: "video",
+			maxCount: 1,
+		},
+		{
+			name: "uid",
+			maxCount: 1,
+		},
+	]),
+	// upload.single("video"),
+	async (req, res) => {
+		if (!req.files["video"]) {
+			// if (!req.file) {
+			return res
+				.status(400)
+				.send(`No file uploaded. JSON: ${JSON.stringify(req.files["video"])}`);
+		}
+		try {
+			const uid = req.body.uid;
+			const video = req.files["video"][0];
+			// const video = req.file;
+			const storageRef = storageref(storage, `${uid}/${video.originalname}`);
+			const task = await uploadBytesResumable(storageRef, video.buffer, {
+				contentType: video.mimetype,
+			});
+			const downloadedURL = await getDownloadURL(storageRef);
+			set(ref(realtimeDb, "videos/" + uid), {
+				name: video.originalname,
+				url: downloadedURL,
+			});
+		} catch (error) {
+			res.status(500).send(`Error: ${error}`);
+		}
 	}
-	try {
-		const storageRef = ref(storage, `videos/${req.file.originalname}`);
-		const task = uploadBytesResumable(storageRef, req.file.buffer, {
-			contentType: req.file.mimetype,
-		});
-		getDownloadURL(storageRef).then((url) =>
-			res.status(201).send(`Upload successfully! Download URL: ${url}`)
-		);
-	} catch (error) {
-		res.status(500).send(`Error: ${error}`);
+);
+
+app.post(
+	"/api/sign-up",
+	formUpload.fields([
+		{ name: "email", maxCount: 1 },
+		{ name: "password", maxCount: 1 },
+	]),
+	(req, res) => {
+		if (!req.body) {
+			return res.status(400).send("Unavailable user credential");
+		}
+		createUserWithEmailAndPassword(auth, req.body.email, req.body.password)
+			.then((userCred) => res.send(`userCred: ${JSON.stringify(userCred)}`))
+			.catch((error) => {
+				res.status(error.code).send(`Message: ${error.message}`);
+			});
 	}
-});
+);
+app.post(
+	"/api/sign-in",
+	formUpload.fields([
+		{ name: "email", maxCount: 1 },
+		{ name: "password", maxCount: 1 },
+	]),
+	(req, res) => {
+		if (!req.body) {
+			return res.status(400).send("Unavailable user credential");
+		}
+		signInWithEmailAndPassword(auth, req.body.email, req.body.password)
+			.then((userCred) => res.send(`userCred: ${userCred.user.uid}`))
+			.catch((error) => {
+				res.status(error.code).send(`Message: ${error.message}`);
+			});
+	}
+);

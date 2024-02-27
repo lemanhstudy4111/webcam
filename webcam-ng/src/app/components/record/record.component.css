@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.main-video {
+  max-width: 500px;
+}
+
+.title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: larger;
+  margin: 10px;
+  text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  gap: 10px;
+}

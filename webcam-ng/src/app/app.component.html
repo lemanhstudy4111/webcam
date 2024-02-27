@@ -1,33 +1,3 @@
-<div class="main-container">
-  <video
-    #main__video
-    class="main-video"
-    [playsInline]="true"
-    autoplay
-    controls
-    name="video"
-  >
-    Can't load video!
-  </video>
-  <h2 class="title">Record and upload your video here:</h2>
-  <div class="btn-container">
-    <app-button
-      [text]="text"
-      (btnClick)="onBtnClick()"
-      [currIcon]="faCircle"
-      [disabled]="false"
-    ></app-button>
-    <!-- <app-button
-      #upload__btn
-      text="Upload"
-      (btnClick)="onUploadClick()"
-      [currIcon]="faUpload"
-      [disabled]="true"
-    ></app-button> -->
-    <app-btn-upload
-      #upload__btn
-      [disabled]="true"
-      (confirmClick)="onUploadClick()"
-    ></app-btn-upload>
-  </div>
+<div class="body-app">
+  <app-menubar></app-menubar>
 </div>

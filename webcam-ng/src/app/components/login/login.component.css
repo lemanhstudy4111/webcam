@@ -1,0 +1,61 @@
+form {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+p-card {
+  display: flex;
+  height: 60%;
+  justify-content: center;
+  align-self: center;
+}
+
+.p-card {
+  width: 90%;
+}
+
+p-button {
+  margin-top: 20px;
+  align-self: center;
+}
+
+.login-container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  height: 90%;
+}
+
+.text-div {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 5px 0;
+}
+
+label {
+  margin: 10px 0;
+}
+
+.bttm-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-btn-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.p-card-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

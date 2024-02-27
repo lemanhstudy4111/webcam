@@ -1,0 +1,25 @@
+<div class="login-container">
+  <p-card header="Login">
+    <form>
+      <div class="text-div">
+        <label>Email</label>
+        <input type="text" pInputText formControlName="login" />
+      </div>
+      <div class="text-div">
+        <label>password</label>
+        <p-password
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+        ></p-password>
+      </div>
+      <div class="bttm-container">
+        <div class="login-btn-container">
+          <button pButton pRipple label="Login" type="submit"></button>
+        </div>
+        <!-- <button pButton pRipple label="Signup" type="submit"></button> -->
+        <p>Don't have an account yet? <a routerLink="/sign-up">Sign up!</a></p>
+      </div>
+    </form>
+  </p-card>
+</div>
