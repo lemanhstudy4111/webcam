@@ -10,7 +10,14 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [InputTextModule, PasswordModule, ButtonModule, CardModule, CheckboxModule, RouterLink],
+  imports: [
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    CardModule,
+    CheckboxModule,
+    RouterLink,
+  ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
@@ -22,10 +29,11 @@ export class SignupComponent implements OnInit {
     this.signupForm = new FormGroup({
       signup: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
-      checkbox: new FormControl(false, Validators.requiredTrue)
+      checkbox: new FormControl(false, Validators.requiredTrue),
     });
   }
   onSubmit(): void {
     this.submitted = true;
+    console.log('signup', this.signupForm);
   }
 }
