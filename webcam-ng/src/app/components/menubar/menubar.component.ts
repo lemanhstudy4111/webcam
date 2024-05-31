@@ -47,4 +47,12 @@ export class MenubarComponent implements OnInit {
       },
     ];
   }
+  expandMenu() {
+    const menubar = document.getElementById('menu-container')!;
+    if (menubar?.className == 'menu-container') {
+      menubar.className += ' responsive';
+    } else {
+      menubar.className = 'menu-container';
+    }
+  }
 }

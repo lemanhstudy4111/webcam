@@ -2,10 +2,10 @@
   <a routerLink="/" id="first" class="logo">
     <fa-icon [icon]="faCloudMoon" size="3x"></fa-icon>
   </a>
-  <a id="bars-icon" class="icon">
-    <fa-icon [icon]="faBars" size="2x" onclick="()"></fa-icon>
+  <a id="bars-icon" class="icon" (click)="expandMenu()">
+    <fa-icon [icon]="faBars" size="2x"></fa-icon>
   </a>
-  <div class="menu-container">
+  <div class="menu-container" id="menu-container">
     <ul class="side left-side-menu">
       <li><a routerLink="/record">Record</a></li>
       <li><a routerLink="/my-videos">My Videos</a></li>
