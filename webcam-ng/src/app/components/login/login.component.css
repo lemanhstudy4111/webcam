@@ -59,3 +59,8 @@ label {
   flex-direction: row;
   justify-content: center;
 }
+
+.invalid {
+  color: red;
+  padding: 2% 0;
+}

@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBars, faCloudMoon } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-menubar',
@@ -16,12 +18,15 @@ import { MenubarModule } from 'primeng/menubar';
     CommonModule,
     ButtonModule,
     MenubarModule,
+    FontAwesomeModule,
   ],
   templateUrl: './menubar.component.html',
   styleUrl: './menubar.component.css',
 })
 export class MenubarComponent implements OnInit {
   items: MenuItem[] = [];
+  faBars = faBars;
+  faCloudMoon = faCloudMoon;
   ngOnInit(): void {
     this.items = [
       {
@@ -41,5 +46,13 @@ export class MenubarComponent implements OnInit {
         routerLink: ['/login'],
       },
     ];
+  }
+  expandMenu() {
+    const menubar = document.getElementById('menubar-container')!;
+    if (menubar?.className == 'menubar-container') {
+      menubar.className += ' responsive';
+    } else {
+      menubar.className = 'menubar-container';
+    }
   }
 }

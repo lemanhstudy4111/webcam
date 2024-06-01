@@ -20,9 +20,7 @@ export class UploadService {
       })
       .catch((error) => {
         if (error.response) {
-          console.log('response data', error.response.data);
-          console.log('response status', error.response.status);
-          console.log('response headers', error.response.headers);
+          console.log('error response', error.response);
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

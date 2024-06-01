@@ -1,2 +1,19 @@
-<p-menubar [model]="items"></p-menubar>
+<div class="menubar-container" id="menubar-container">
+  <button routerLink="/" id="first" class="logo">
+    <fa-icon [icon]="faCloudMoon" size="3x"></fa-icon>
+  </button>
+  <button id="bars-icon" class="bars-icon" (click)="expandMenu()">
+    <fa-icon [icon]="faBars" size="2x"></fa-icon>
+  </button>
+  <div class="menu-container" id="menu-container">
+    <ul class="side left-side-menu">
+      <li><a routerLink="/record">Record</a></li>
+      <li><a routerLink="/my-videos">My Videos</a></li>
+    </ul>
+    <ul class="side right-side-menu">
+      <li><a routerLink="/login">Login</a></li>
+      <li><a routerLink="/sign-up">Sign Up</a></li>
+    </ul>
+  </div>
+</div>
 <router-outlet></router-outlet>

@@ -1,21 +1,11 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
 import cors from "cors";
-import {
-	getDownloadURL,
-	getStorage,
-	ref as storageref,
-	uploadBytesResumable,
-} from "firebase/storage";
 import express from "express";
-import dotenv from "dotenv";
 import multer from "multer";
-import {
-	createUserWithEmailAndPassword,
-	getAuth,
-	signInWithEmailAndPassword,
-} from "firebase/auth";
-import { set, getDatabase, ref } from "firebase/database";
+import Database from "./database/db.js";
+import dotenv from "dotenv";
+import { getUserFn, signIn, signOutFn } from "./src/auth.js";
+import { uploadFn } from "./src/video.js";
+import { onAuthStateChanged } from "firebase/auth";
 
 dotenv.config();
 const envFile = process.env;
@@ -31,27 +21,58 @@ const firebaseConfig = {
 	measurementId: envFile.MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const appFirebase = initializeApp(firebaseConfig);
-const storage = getStorage(appFirebase);
-const realtimeDb = getDatabase(appFirebase);
-const auth = getAuth(appFirebase);
-//express js server
+//Initializing firebase database
+const db = new Database(firebaseConfig);
+const storage = db.getStorage();
+const realtimeDb = db.getRealtimeDb();
+const auth = db.getAuth();
+let currUser = null;
+onAuthStateChanged(auth, (user) => {
+	if (user) {
+		currUser = user;
+	}
+});
+
+//initializing express.js app
 const app = express();
 const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-//initialize multer
-const multStorage = multer.memoryStorage();
-const upload = multer({ storage: multStorage });
-const formUpload = multer();
-
 app.listen(PORT, () => {
 	console.log(`App is running on ${PORT}`);
 });
 
+//initializing multer storage
+const multStorage = multer.memoryStorage();
+const upload = multer({ storage: multStorage });
+const formUpload = multer();
+
+//auth api
+app.post(
+	"/api/sign-up",
+	formUpload.fields([
+		{ name: "email", maxCount: 1 },
+		{ name: "password", maxCount: 1 },
+	]),
+	(req, res) => signUp(auth, req, res)
+);
+
+app.post(
+	"/api/sign-in",
+	formUpload.fields([
+		{ name: "email", maxCount: 1 },
+		{ name: "password", maxCount: 1 },
+	]),
+	(req, res) => signIn(auth, req, res)
+);
+
+app.post("/api/sign-out", (req, res) => signOutFn(res));
+
+app.get("/api/get-token", (req, res) => getUserFn(res, currUser));
+
+//video upload api
 app.post(
 	"/api/upload",
 	upload.fields([
@@ -59,69 +80,14 @@ app.post(
 			name: "video",
 			maxCount: 1,
 		},
-		{
-			name: "uid",
-			maxCount: 1,
-		},
 	]),
-	// upload.single("video"),
-	async (req, res) => {
+	(req, res) => {
 		if (!req.files["video"]) {
 			// if (!req.file) {
 			return res
 				.status(400)
 				.send(`No file uploaded. JSON: ${JSON.stringify(req.files["video"])}`);
 		}
-		try {
-			const uid = req.body.uid;
-			const video = req.files["video"][0];
-			// const video = req.file;
-			const storageRef = storageref(storage, `${uid}/${video.originalname}`);
-			const task = await uploadBytesResumable(storageRef, video.buffer, {
-				contentType: video.mimetype,
-			});
-			const downloadedURL = await getDownloadURL(storageRef);
-			set(ref(realtimeDb, "videos/" + uid), {
-				name: video.originalname,
-				url: downloadedURL,
-			});
-		} catch (error) {
-			res.status(500).send(`Error: ${error}`);
-		}
-	}
-);
-
-app.post(
-	"/api/sign-up",
-	formUpload.fields([
-		{ name: "email", maxCount: 1 },
-		{ name: "password", maxCount: 1 },
-	]),
-	(req, res) => {
-		if (!req.body) {
-			return res.status(400).send("Unavailable user credential");
-		}
-		createUserWithEmailAndPassword(auth, req.body.email, req.body.password)
-			.then((userCred) => res.send(`userCred: ${JSON.stringify(userCred)}`))
-			.catch((error) => {
-				res.status(error.code).send(`Message: ${error.message}`);
-			});
-	}
-);
-app.post(
-	"/api/sign-in",
-	formUpload.fields([
-		{ name: "email", maxCount: 1 },
-		{ name: "password", maxCount: 1 },
-	]),
-	(req, res) => {
-		if (!req.body) {
-			return res.status(400).send("Unavailable user credential");
-		}
-		signInWithEmailAndPassword(auth, req.body.email, req.body.password)
-			.then((userCred) => res.send(`userCred: ${userCred.user.uid}`))
-			.catch((error) => {
-				res.status(error.code).send(`Message: ${error.message}`);
-			});
+		uploadFn(req, res, currUser, storage, realtimeDb);
 	}
 );

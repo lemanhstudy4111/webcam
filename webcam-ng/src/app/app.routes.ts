@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './components/auth/auth.component';
 import { RecordComponent } from '../app/components/record/record.component';
 import { AppComponent } from './app.component';
 import { MyVideoComponent } from './components/my-video/my-video.component';

@@ -1,9 +1,17 @@
 <div class="login-container">
   <p-card header="Login">
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="text-div">
         <label>Email</label>
-        <input type="text" pInputText formControlName="login" />
+        <input type="text" pInputText formControlName="email" />
+        <div
+          *ngIf="
+            loginForm?.get('email')?.invalid && loginForm?.get('email')?.touched
+          "
+          class="invalid"
+        >
+          Please enter valid email
+        </div>
       </div>
       <div class="text-div">
         <label>password</label>
@@ -12,6 +20,15 @@
           [toggleMask]="true"
           [feedback]="false"
         ></p-password>
+        <div
+          *ngIf="
+            loginForm?.get('password')?.invalid &&
+            loginForm?.get('password')?.dirty
+          "
+          class="invalid"
+        >
+          Please enter valid password
+        </div>
       </div>
       <div class="bttm-container">
         <div class="login-btn-container">

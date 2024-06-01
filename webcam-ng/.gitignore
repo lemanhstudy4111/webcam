@@ -40,3 +40,10 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+#git ignore
+.gitignore
+
+#private
+webcam-ae0c2-firebase-adminsdk-4vqke-3944c5f490.json
+.env
