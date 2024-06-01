@@ -48,11 +48,11 @@ export class MenubarComponent implements OnInit {
     ];
   }
   expandMenu() {
-    const menubar = document.getElementById('menu-container')!;
-    if (menubar?.className == 'menu-container') {
+    const menubar = document.getElementById('menubar-container')!;
+    if (menubar?.className == 'menubar-container') {
       menubar.className += ' responsive';
     } else {
-      menubar.className = 'menu-container';
+      menubar.className = 'menubar-container';
     }
   }
 }
