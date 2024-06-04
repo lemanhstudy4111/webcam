@@ -3,7 +3,12 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="text-div">
         <label>Email</label>
-        <input type="text" pInputText formControlName="email" />
+        <input
+          type="text"
+          pInputText
+          formControlName="email"
+          (ngModelChange)="onChange()"
+        />
         <div
           *ngIf="
             loginForm?.get('email')?.invalid && loginForm?.get('email')?.touched
@@ -19,6 +24,7 @@
           formControlName="password"
           [toggleMask]="true"
           [feedback]="false"
+          (ngModelChange)="onChange()"
         ></p-password>
         <div
           *ngIf="
@@ -32,7 +38,13 @@
       </div>
       <div class="bttm-container">
         <div class="login-btn-container">
-          <button pButton pRipple label="Login" type="submit"></button>
+          <button
+            pButton
+            pRipple
+            label="Login"
+            type="submit"
+            [disabled]="!this.formValid"
+          ></button>
         </div>
         <!-- <button pButton pRipple label="Signup" type="submit"></button> -->
         <p>Don't have an account yet? <a routerLink="/sign-up">Sign up!</a></p>
