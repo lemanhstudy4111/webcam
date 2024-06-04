@@ -6,37 +6,32 @@ import {
 
 export function signIn(auth, req, res) {
 	if (!req.body) {
-		return res.status(400).send("Unavailable user credential");
+		return res.status(400).send({ message: "Unavailable user credential" });
 	}
-	signInWithEmailAndPassword(auth, req.body.email, req.body.password)
+	return signInWithEmailAndPassword(auth, req.body.email, req.body.password)
 		.then((userCred) => {
-			res.send(`userCred: ${userCred.user.uid}`);
+			res.send({ message: `userCred: ${userCred.user.uid}` });
 			return res.status(200);
 		})
-		.catch((error) => {
-			res.status(error.code).send(`Message: ${error.message}`);
-			return error.code;
+		.catch((err) => {
+			res.send({ statusCode: err.code, message: err.message });
+			return err.code;
 		});
 }
 
 export function signUp(auth, req, res) {
 	if (!req.body) {
-		return res.status(400).send("Unavailable user credential");
+		return res.status(400).send({ message: "Unavailable user credential" });
 	}
-	const dataStat = createUserWithEmailAndPassword(
-		auth,
-		req.body.email,
-		req.body.password
-	)
+	return createUserWithEmailAndPassword(auth, req.body.email, req.body.password)
 		.then((userCred) => {
-			res.send(`userCred: ${JSON.stringify(userCred)}`);
+			res.send({ message: userCred.user.uid });
 			return res.status(200);
 		})
 		.catch((error) => {
-			res.status(error.code).send(`Message: ${error.message}`);
+			res.send({ statusCode: error.statusCode, message: error.message });
 			return error.code;
 		});
-	return dataStat;
 }
 
 export function getUserFn(res, currUser) {

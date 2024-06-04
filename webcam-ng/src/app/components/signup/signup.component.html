@@ -1,29 +1,75 @@
 <div class="signup-container">
-    <p-card header="Sign-up">
-      <form>
-        <div class="text-div">
-          <label>Email</label>
-          <input type="text" pInputText formControlName="signup" />
+  <p-card header="Sign Up">
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="text-div">
+        <label>Email</label>
+        <input
+          type="text"
+          pInputText
+          formControlName="email"
+          (ngModelChange)="onChange()"
+        />
+        <div
+          *ngIf="
+            signupForm?.get('email')?.invalid &&
+            signupForm?.get('email')?.touched
+          "
+          class="invalid"
+        >
+          Please enter valid email
         </div>
-        <div class="text-div">
-          <label>password</label>
-          <p-password
-            formControlName="password"
-            [toggleMask]="true"
-            [feedback]="false"
-          ></p-password>
+      </div>
+      <div class="text-div">
+        <label>password</label>
+        <p-password
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+          styleClass="p-password p-component p-inputwrapper p-input-icon-right"
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          (ngModelChange)="onChange()"
+        ></p-password>
+        <div
+          *ngIf="
+            signupForm?.get('password')?.invalid &&
+            signupForm?.get('password')?.dirty
+          "
+          class="invalid"
+        >
+          Please enter valid password
         </div>
-        <div class="bttm-container">
-            <span>
-                <p-checkbox formControlName="checked" value="terms" inputId="binary"></p-checkbox>
-                <p>I accept the terms and conditions.</p>
-            </span>
-          <div class="signup-btn-container">
-            <button pButton pRipple label="Sign up" type="submit"></button>
-            <p>Already have an account? <a routerLink="/login">Log in!</a></p>
-          </div>
+      </div>
+      <div class="bttm-container">
+        <span>
+          <p-checkbox
+            formControlName="terms"
+            value="true"
+            inputId="binary"
+            (ngModelChange)="onChange()"
+          ></p-checkbox>
+          <p>I accept the terms and conditions.</p>
+        </span>
+        <div
+          *ngIf="
+            signupForm?.get('terms')?.invalid &&
+            signupForm?.get('terms')?.invalid
+          "
+          class="invalid"
+        >
+          Please accept the terms and conditions
         </div>
-      </form>
-    </p-card>
-  </div>
-  
+        <div class="signup-btn-container">
+          <button
+            pButton
+            pRipple
+            label="Sign up"
+            type="submit"
+            [disabled]="!this.formValid"
+          ></button>
+          <p>Already have an account? <a routerLink="/login">Log in!</a></p>
+        </div>
+      </div>
+    </form>
+  </p-card>
+</div>

@@ -3,7 +3,7 @@ import express from "express";
 import multer from "multer";
 import Database from "./database/db.js";
 import dotenv from "dotenv";
-import { getUserFn, signIn, signOutFn } from "./src/auth.js";
+import { getUserFn, signIn, signOutFn, signUp } from "./src/auth.js";
 import { uploadFn } from "./src/video.js";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -68,9 +68,9 @@ app.post(
 	(req, res) => signIn(auth, req, res)
 );
 
-app.post("/api/sign-out", (req, res) => signOutFn(res));
+app.post("/api/sign-out", (_, res) => signOutFn(res));
 
-app.get("/api/get-token", (req, res) => getUserFn(res, currUser));
+app.get("/api/get-token", (_, res) => getUserFn(res, currUser));
 
 //video upload api
 app.post(
