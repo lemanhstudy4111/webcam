@@ -70,7 +70,7 @@ export class RecordComponent implements OnInit {
     // //upload with axios post
     let data = await this.upload.uploadVideo(
       RecordComponent.recordedVideo,
-      'http://localhost:3000/upload'
+      'http://localhost:3000/api/upload'
     );
     console.log('recorded video', RecordComponent.recordedVideo);
   }

@@ -36,18 +36,21 @@ export function signUp(auth, req, res) {
 
 export function getUserFn(res, currUser) {
 	if (!currUser) {
-		res.send("need to sign in");
+		return { message: "need to sign in", user: -1, isSignedIn: 0 };
 	} else {
-		res.send(currUser);
+		return { user: currUser, isSignedIn: 1 };
 	}
 }
 
 export function signOutFn(res) {
 	signOut(auth)
 		.then(() => {
-			res.status(200).send("Sign out successfully!");
+			res.send({ message: "Sign out successfully!", success: 1 });
 		})
 		.catch((err) => {
-			res.status(500).send("Something happened when signing out...");
+			res.send({
+				message: "Something happened when signing out...",
+				success: 0,
+			});
 		});
 }

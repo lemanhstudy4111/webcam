@@ -1,10 +1,10 @@
 .menubar-container {
-  background-color: #bc96e6;
+  background-color: var(--primary-color);
   display: flex;
   flex-flow: row nowrap;
   width: 100%;
   justify-content: space-evenly;
-  color: #210b2c;
+  color: var(--primary-color-text);
   height: 10%;
 }
 .bars-icon {
@@ -14,12 +14,12 @@ button {
   display: flex;
   align-items: center;
   border: none;
-  background-color: #bc96e6;
+  background-color: var(--primary-color);
   transition: 0.2s;
 }
 
 button:hover {
-  background-color: #dabdfa;
+  background-color: var(--highlight-bg);
   cursor: pointer;
 }
 
@@ -59,7 +59,7 @@ li:hover {
 
 .side a:not(#bars-icon) {
   text-decoration: none;
-  color: #210b2c;
+  color: var(--primary-color-text);
   font-weight: bold;
 }
 
