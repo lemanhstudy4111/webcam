@@ -4,7 +4,7 @@ import {
 	ref as storageref,
 } from "firebase/storage";
 
-export async function uploadFn(req, res, currUser, storage, realtimeDb) {
+export async function uploadFn(req, res, uid, storage, realtimeDb) {
 	/*
 	if (!req.files["video"]) {
 		// if (!req.file) {
@@ -14,8 +14,6 @@ export async function uploadFn(req, res, currUser, storage, realtimeDb) {
 	}
     */
 	try {
-		console.log(currUser);
-		const uid = currUser.uid;
 		const video = req.files["video"][0];
 		// const video = req.file;
 		const storageRef = storageref(storage, `${uid}/${video.originalname}`);
@@ -27,7 +25,9 @@ export async function uploadFn(req, res, currUser, storage, realtimeDb) {
 			name: video.originalname,
 			url: downloadedURL,
 		});
+		res.send({ downloadUrl: downloadedURL, message: "upload successfully" });
+		return downloadedURL;
 	} catch (error) {
-		res.status(500).send(`Error: ${error}`);
+		res.send({ message: `Error: ${error}`, statusCode: error.code });
 	}
 }

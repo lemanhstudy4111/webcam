@@ -70,7 +70,10 @@ app.post(
 
 app.post("/api/sign-out", (_, res) => signOutFn(res));
 
-app.get("/api/get-token", (_, res) => getUserFn(res, currUser));
+app.get("/api/get-token", (_, res) => {
+	const result = getUserFn(res, currUser);
+	res.send(result);
+});
 
 //video upload api
 app.post(
@@ -84,10 +87,17 @@ app.post(
 	(req, res) => {
 		if (!req.files["video"]) {
 			// if (!req.file) {
-			return res
-				.status(400)
-				.send(`No file uploaded. JSON: ${JSON.stringify(req.files["video"])}`);
+			return res.status(400).send({
+				message: `No file uploaded. JSON: ${JSON.stringify(
+					req.files["video"]
+				)}`,
+			});
 		}
-		uploadFn(req, res, currUser, storage, realtimeDb);
+		const userTokenId = getUserFn(res, currUser);
+		console.log(userTokenId);
+		if (userTokenId.isSignedIn == 1) {
+			const uid = userTokenId.user.uid;
+			return uploadFn(req, res, uid, storage, realtimeDb);
+		}
 	}
 );
