@@ -75,3 +75,7 @@ span {
 p-password {
   width: 100%;
 }
+
+form {
+  background-color: var(--surface-card);
+}
